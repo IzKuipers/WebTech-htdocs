@@ -1,0 +1,17 @@
+{
+    "name": "izaak/htmltopdf",
+    "autoload": {
+        "psr-4": {
+            "Izaak\\Htmltopdf\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Izaak Kuipers",
+            "email": "izaak.kuipers@gmail.com"
+        }
+    ],
+    "require": {
+        "dompdf/dompdf": "^3.0"
+    }
+}
