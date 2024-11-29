@@ -1,0 +1,35 @@
+a {
+  text-decoration: none;
+  color: var(--accent);
+  text-underline-offset: 0px;
+}
+
+a:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+button,
+input[type="submit"] {
+  padding: 8px 10px;
+  background-color: var(--accent);
+  color: var(--bg);
+  border-radius: 3px;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background-color: var(--accent-secondary);
+}
+
+input:not([type="submit"]),
+select {
+  border: var(--border-clr) 1px solid;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+input:not([type="submit"]):focus {
+  border-color: var(--accent);
+}

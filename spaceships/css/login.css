@@ -1,0 +1,44 @@
+@import url("./base.css");
+
+div.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+  height: 100%;
+}
+
+div.login > form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+div.login label {
+  margin-top: 20px;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+div.login h1 {
+  font-size: 32px;
+}
+
+div.login input {
+  width: 350px;
+  max-width: 100%;
+}
+
+div.login:has(input[id="username"]:focus) label[for="username"],
+div.login:has(input[id="password"]:focus) label[for="password"] {
+  color: var(--accent);
+  opacity: 1;
+}
+
+div.login a.no-account {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}

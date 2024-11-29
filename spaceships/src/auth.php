@@ -1,6 +1,6 @@
 <?php
 
-require_once "../vendor/autoload.php";
+require_once "env.php";
 
 use Ramsey\Uuid\Uuid;
 
@@ -11,12 +11,12 @@ class AuthorizationManager
   private string $password;
   private string $database;
 
-  public function __construct(string $hostname, string $username, string $password, string $database)
+  public function __construct()
   {
-    $this->hostname = $hostname;
-    $this->username = $username;
-    $this->password = $password;
-    $this->database = $database;
+    $this->hostname = DB_HOSTNAME;
+    $this->username = DB_USERNAME;
+    $this->password = DB_PASSWORD;
+    $this->database = DB_DATABASE;
 
     $this->initializeDatabase();
   }
@@ -32,19 +32,6 @@ class AuthorizationManager
 
       $connection = $this->connect();
       $query = <<<SQL
-        SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-        START TRANSACTION;
-        SET time_zone = "+00:00";
-  
-  
-        /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-        /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-        /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-        /*!40101 SET NAMES utf8mb4 */;
-  
-        CREATE DATABASE IF NOT EXISTS `spaceships` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-        USE `spaceships`;
-  
         CREATE TABLE IF NOT EXISTS `tokens` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `userId` int(11) NOT NULL,
@@ -63,14 +50,9 @@ class AuthorizationManager
   
         ALTER TABLE `tokens`
           ADD CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-        COMMIT;
-  
-        /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-        /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-        /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
       SQL;
 
-      $connection->query($query);
+      $connection->multi_query($query);
     } catch (Exception $e) {
       throw new Exception("Failed to initialize database: " . $e->getMessage());
     } finally {
@@ -92,11 +74,12 @@ class AuthorizationManager
 
   public function disconnect(mysqli $connection, mysqli_stmt $statement = null)
   {
-    if (isset($statement)) {
+    if (isset($statement) && $statement instanceof mysqli_stmt) {
       try {
         $statement->close();
       } catch (Exception $e) {
-        printf("Failed to close a statement: " . $e->getMessage());
+        $e->getMessage();
+        // silently error
       }
     }
 
@@ -218,16 +201,17 @@ class AuthorizationManager
 
   public function createUser($username, $password)
   {
+    $json = "{}";
     $safeUsername = htmlspecialchars(trim($username));
     $hash = password_hash($password, PASSWORD_BCRYPT);
 
-    $query = "INSERT INTO users(username,hash) VALUES (?,?)";
+    $query = "INSERT INTO users(username,hash,savedata) VALUES (?,?,?)";
 
     try {
       global $connection, $statement;
       $connection = $this->connect();
       $statement = $connection->prepare($query);
-      $statement->bind_param("ss", $safeUsername, $hash);
+      $statement->bind_param("sss", $safeUsername, $hash, $json);
       $statement->execute();
     } catch (Exception $e) {
       throw new Exception("Failed to create user: " . $e->getMessage());
