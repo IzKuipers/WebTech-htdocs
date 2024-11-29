@@ -1,25 +1,59 @@
 div.ship-list {
   margin: 0 auto;
-  margin-top: 20px;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, 350px);
+  grid-template-columns: repeat(auto-fit, 300px);
+  grid-template-rows: repeat(auto-fit, 350px);
   justify-content: center;
+  gap: 40px;
+  padding: 40px;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 div.ship-list div.ship {
   width: 300px;
-  max-width: 80%;
+  height: 350px;
+  border: var(--border-clr) 1px solid;
+  padding: 20px;
 }
 
 div.ship-list div.ship div.image {
   background-position: center;
   background-image: var(--src);
   background-size: cover;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4/2.5;
   width: 100%;
-  outline: var(--accent) 2px solid;
-  outline-offset: 2px;
+  border: var(--accent) 2px solid;
+  outline: var(--bg) 2px solid;
+  outline-offset: -4px;
   border-radius: 5px;
   margin-bottom: 20px;
+}
+
+div.ship-list div.ship * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.ship-list div.ship h1.name {
+  white-space: nowrap;
+}
+
+div.ship-list div.ship p.description {
+  height: 50px;
+}
+
+div.ship-list div.ship div.author {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+div.ship-list div.ship div.author div.pill {
+  padding: 3px 6px;
+  background-color: var(--border-clr);
+  border-radius: 4px;
+  min-width: 50px;
+  text-align: center;
 }

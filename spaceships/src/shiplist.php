@@ -1,6 +1,7 @@
 <?php
 
 require_once "component.php";
+require_once "util.php";
 
 class ShipList extends Component
 {
@@ -32,13 +33,15 @@ class ShipList extends Component
   {
     $image = base64_encode($ship["image"]);
     $name = $ship["name"];
+    $id = $ship["id"];
     $description = $ship["description"];
     $authorName = $ship["authorName"];
     $timestamp = date("j M · G:i", strtotime($ship["timestamp"]));
+    $shortDescription = truncateString($description, 32);
 
     $imageElement = "<div class='image' style='--src: url(\"data:image/png;base64,$image\");'></div>";
-    $nameElement = "<h1 class='name'>$name</h1>";
-    $descriptionElement = "<p class='description'>$description</h1>";
+    $nameElement = "<h1 class='name'><a href='ship.php?id=$id'>$name</a></h1>";
+    $descriptionElement = "<p class='description'>$shortDescription</h1>";
     $authorBit = <<<HTML
       <div class='author'>
         <div class="pill author-name"> 

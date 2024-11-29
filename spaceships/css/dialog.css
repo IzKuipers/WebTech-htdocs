@@ -1,0 +1,36 @@
+div.dialog-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0004;
+  z-index: 1000000000;
+}
+
+div.dialog-wrapper div.dialog {
+  border: var(--accent) 3px solid;
+  padding: 20px;
+  border-radius: 4px;
+  background-color: var(--bg);
+  max-width: 500px;
+}
+
+div.dialog-wrapper div.dialog h1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+div.dialog-wrapper div.dialog > p {
+  margin-bottom: 10px;
+}
+
+div.dialog-wrapper div.dialog h1 a {
+  font-weight: normal;
+  font-size: 18px;
+}

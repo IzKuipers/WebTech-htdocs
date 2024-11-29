@@ -2,6 +2,9 @@
 require_once("src/auth.php");
 require_once("src/session.php");
 require_once("vendor/autoload.php");
+require_once("src/error.php");
+
+showError();
 
 if (isset($_COOKIE["token"]) && $sessionManager->isLoggedIn($_COOKIE["token"])) {
   // echo "Already logged in";
@@ -21,6 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
   $token = $authManager->authenticateUser($username, $password);
 
+  if (!$token)
+    die;
+
+  $sessionManager->trySessionStart();
+  $_SESSION["toast"] = 2;
   setcookie("token", $token, time() + (86400 * 30 * 7));
   header("Location: index.php");
 }

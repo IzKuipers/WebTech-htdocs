@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import url("./root.css");
+@import url("./toast.css");
+@import url("./dialog.css");
 @import url("./elements.css");
 
 * {
@@ -8,7 +11,6 @@
   box-sizing: border-box;
   font-size: inherit;
   font-family: inherit;
-  transition: all 0.3s;
   background-color: inherit;
   color: inherit;
   border: none;
@@ -27,4 +29,12 @@ body {
   background-color: var(--bg);
   font-family: "Bruno Ace";
   font-size: 18px;
+}
+
+main {
+  height: calc(100% - 100px);
+}
+
+body * {
+  transition: background-color 0.3s;
 }

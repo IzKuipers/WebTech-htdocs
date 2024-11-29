@@ -9,3 +9,9 @@ header {
 header h1 {
   margin-right: auto;
 }
+
+header div.account-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}

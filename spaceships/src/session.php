@@ -19,7 +19,10 @@ class SessionManager
   {
     global $authManager;
 
+    $this->trySessionStart();
+
     if (!isset($_COOKIE["token"])) {
+      $_SESSION['toast'] = 6;
       $this->logout();
 
       return;
@@ -55,6 +58,13 @@ class SessionManager
       return null;
 
     return $authManager->getUserByToken($this->token);
+  }
+
+  public function trySessionStart()
+  {
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
   }
 }
 

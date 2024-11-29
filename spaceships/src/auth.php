@@ -1,6 +1,7 @@
 <?php
 
 require_once "env.php";
+require_once "error.php";
 
 use Ramsey\Uuid\Uuid;
 
@@ -167,25 +168,28 @@ class AuthorizationManager
       $statement->execute();
       $result = $statement->get_result();
 
-      if ($result->num_rows == 0)
-        throw new Exception("No such user '$username'");
+      if ($result->num_rows == 0) {
+        Dialog(ErrorMessages::UserNotFound);
+
+        return "";
+      }
 
       $row = $result->fetch_assoc();
       $hash = $row["hash"];
 
       $passwordValid = $this->verifyPassword($hash, $password);
 
-      if (!$passwordValid)
-        throw new Exception("Access denied for '$username'");
+      if (!$passwordValid) {
+        Dialog(ErrorMessages::PasswordIncorrect);
+
+        return "";
+      }
 
       $token = $this->createToken($row);
 
-      if (strlen($token) == 0)
-        throw new Exception("Failed to generate token");
-
       return $token;
     } catch (Exception $e) {
-      throw new Exception("Authentication failed: " . $e->getMessage());
+      return "";
     }
   }
 
@@ -214,7 +218,7 @@ class AuthorizationManager
       $statement->bind_param("sss", $safeUsername, $hash, $json);
       $statement->execute();
     } catch (Exception $e) {
-      throw new Exception("Failed to create user: " . $e->getMessage());
+      Dialog(ErrorMessages::UserAlreadyExists);
     } finally {
       $this->disconnect($connection, $statement);
     }

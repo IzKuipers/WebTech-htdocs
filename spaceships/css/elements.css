@@ -2,6 +2,7 @@ a {
   text-decoration: none;
   color: var(--accent);
   text-underline-offset: 0px;
+  transition: text-underline-offset 0.3s, color 0.3s !important;
 }
 
 a:hover {
@@ -24,12 +25,18 @@ input[type="submit"]:hover {
 }
 
 input:not([type="submit"]),
-select {
+select,
+textarea {
   border: var(--border-clr) 1px solid;
   padding: 10px;
   border-radius: 3px;
 }
 
+textarea {
+  min-height: 200px;
+}
+
+textarea:focus,
 input:not([type="submit"]):focus {
-  border-color: var(--accent);
+  border-color: var(--accent) !important;
 }

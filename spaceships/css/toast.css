@@ -1,0 +1,51 @@
+div.toast-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10000;
+  background-color: transparent;
+}
+
+div.toast-wrapper div.toast {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 5;
+  color: var(--fg);
+  gap: 10px;
+  height: 45px;
+  transition: translate 0.3s, opacity 0.3s;
+  background-color: var(--bg);
+  border: var(--accent) 2px solid;
+  outline: var(--bg) 2px solid;
+  outline-offset: -4px;
+  translate: 0 -50px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+div.toast-wrapper div.toast.warning {
+  border-color: rgb(255, 166, 0);
+  color: var(--bg);
+}
+
+div.toast-wrapper div.toast.error {
+  border-color: red;
+  color: var(--bg);
+}
+div.toast-wrapper div.toast.success {
+  background-color: rgb(85, 156, 85);
+  color: var(--bg);
+}
+
+div.toast-wrapper div.toast.visible {
+  translate: 0 0;
+  opacity: 1;
+  pointer-events: initial;
+}

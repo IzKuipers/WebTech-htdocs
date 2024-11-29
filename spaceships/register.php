@@ -2,6 +2,9 @@
 
 require_once("src/auth.php");
 require_once("vendor/autoload.php");
+require_once("src/error.php");
+
+showError();
 
 if (isset($_COOKIE["token"]) && $sessionManager->isLoggedIn($_COOKIE["token"])) {
   header("Location: index.php");
@@ -25,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $authManager = new AuthorizationManager();
     $authManager->createUser($username, $password);
 
+    $_SESSION["toast"] = 1;
     header("Location: login.php");
   } catch (Exception $e) {
     // TODO

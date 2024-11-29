@@ -1,0 +1,30 @@
+div.add-dialog {
+  width: 500px;
+  max-width: 100%;
+}
+
+div.add-dialog > form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+div.add-dialog label {
+  margin-top: 20px;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+div.add-dialog h1 {
+  font-size: 32px;
+}
+
+div.add-dialog input {
+  /* width: 350px; */
+  max-width: 100%;
+}
+
+div.add-dialog textarea {
+  resize: none;
+  margin-bottom: 20px;
+}

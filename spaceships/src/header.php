@@ -32,7 +32,7 @@ class HeaderBar extends Component
 
     if ($this->addButton) {
       $result .= <<<HTML
-        <a href="add.php" class="add-ship">
+        <a href="index.php?adddialog" class="add-ship">
           <button>
             Add ship...
           </button>
@@ -43,7 +43,9 @@ class HeaderBar extends Component
     if ($user) {
       $result .= <<<HTML
         <div class="account-area">
-          <span class="username">$username</span>&nbsp;&mdash;&nbsp;<a href="logout.php" class="logout">Logout</a>
+          <span class="username">$username</span>
+          <a href="index.php?settings" class="settings material-icons">settings</a>
+          <a href="logout.php" class="logout material-icons">logout</a>
         </div>
       HTML;
     }
