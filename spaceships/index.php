@@ -4,6 +4,7 @@ require_once "src/session.php";
 
 $sessionManager->checkIfLoggedIn();
 $user = $sessionManager->me();
+
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +19,9 @@ $user = $sessionManager->me();
 
 <body>
   Hi, <?= $user["username"] ?>!
+  <a href="logout.php">Logout</a>
+  <hr>
+  <pre><?php var_dump($user) ?></pre>
 </body>
 
 </html>
