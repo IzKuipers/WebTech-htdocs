@@ -2,7 +2,8 @@
 
 namespace Spaceships;
 
-use Spaceships\AuthorizationManager;
+require_once("auth.php");
+
 
 class SessionManager
 {
