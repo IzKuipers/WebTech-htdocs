@@ -1,6 +1,14 @@
 <?php
 require_once("src/auth.php");
+require_once("src/session.php");
 require_once("vendor/autoload.php");
+
+if (isset($_COOKIE["token"]) && $sessionManager->isLoggedIn($_COOKIE["token"])) {
+  // echo "Already logged in";
+  header("Location: index.php");
+
+  die;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
   if (!isset($_POST["username"], $_POST["password"])) {
@@ -11,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
   $username = $_POST["username"];
   $password = $_POST["password"];
 
-  $authManager = new AuthorizationManager();
-
   $token = $authManager->authenticateUser($username, $password);
 
+  setcookie("token", $token, time() + (86400 * 30 * 7));
+  header("Location: index.php");
 }
 ?>
 <!DOCTYPE html>

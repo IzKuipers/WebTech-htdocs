@@ -1,7 +1,13 @@
 <?php
 require_once("src/auth.php");
+require_once("src/session.php");
 require_once("vendor/autoload.php");
 
+if (isset($_COOKIE["token"]) && $sessionManager->isLoggedIn($_COOKIE["token"])) {
+  header("Location: index.php");
+
+  die;
+}
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
   if (!isset($_POST["username"], $_POST["password"], $_POST["confirm"])) {
     header("Location: register.php");

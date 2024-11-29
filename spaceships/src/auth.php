@@ -28,7 +28,6 @@ class AuthorizationManager
   public function initializeDatabase()
   {
     try {
-      global $connection;
 
       $connection = $this->connect();
       $query = <<<SQL
@@ -95,16 +94,12 @@ class AuthorizationManager
     $token = Uuid::uuid4()->toString();
 
     try {
-      global $connection, $statement;
-
       $connection = $this->connect();
       $query = "INSERT INTO tokens(value,userId) VALUES (?,?)";
       $statement = $connection->prepare($query);
 
       $statement->bind_param("si", $token, $user["id"]);
       $statement->execute();
-
-      $this->disconnect($connection, $statement);
 
       return $token;
     } catch (Exception $e) {
@@ -117,13 +112,16 @@ class AuthorizationManager
   public function validateToken(string $token): bool
   {
     try {
-      global $connection, $statement;
-
       $connection = $this->connect();
       $query = "SELECT userId,id FROM tokens WHERE value = ?";
       $statement = $connection->prepare($query);
       $statement->bind_param("s", $token);
       $statement->execute();
+      $result = $statement->get_result();
+
+      if ($result->num_rows == 0) {
+        return false;
+      }
 
       return true;
     } catch (Exception $e) {
@@ -136,7 +134,6 @@ class AuthorizationManager
   public function discontinueToken(string $token): bool
   {
     try {
-      global $connection, $statement;
 
       $connection = $this->connect();
       $query = "DELETE FROM tokens WHERE value = ?";
@@ -237,4 +234,53 @@ class AuthorizationManager
       $this->disconnect($connection, $statement);
     }
   }
+
+  public function getUserByToken(string $token)
+  {
+    try {
+      $connection = $this->connect();
+      $query = "SELECT userId FROM tokens WHERE value = ?";
+      $statement = $connection->prepare($query);
+      $statement->bind_param("s", $token);
+      $statement->execute();
+      $result = $statement->get_result();
+
+      if ($result->num_rows == 0)
+        return null;
+
+      $row = $result->fetch_assoc();
+      $userId = (int) $row["userId"];
+
+      return $this->getUserById($userId);
+    } catch (Exception $e) {
+      return null;
+    } finally {
+      $this->disconnect($connection, $statement);
+    }
+  }
+
+  public function getUserById(int $userId)
+  {
+    try {
+      $connection = $this->connect();
+      $query = "SELECT * FROM users WHERE id = ?";
+      $statement = $connection->prepare($query);
+      $statement->bind_param("s", $userId);
+      $statement->execute();
+      $result = $statement->get_result();
+
+      if ($result->num_rows == 0)
+        return null;
+
+      $row = $result->fetch_assoc();
+
+      return $row;
+    } catch (Exception $e) {
+      return null;
+    } finally {
+      $this->disconnect($connection, $statement);
+    }
+  }
 }
+
+$authManager = new AuthorizationManager();
