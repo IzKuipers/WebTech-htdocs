@@ -227,11 +227,6 @@ class AuthorizationManager
 
   public function deleteUser(string $username)
   {
-    global $shipStorage;
-
-    $user = $this->getUserByName($username);
-    $userId = $user ? $user["id"] : "";
-
     try {
       global $connection, $statement;
       $connection = $this->connect();
@@ -239,9 +234,6 @@ class AuthorizationManager
       $statement = $connection->prepare($query);
       $statement->bind_param("s", $username);
       $statement->execute();
-
-      if ($userId)
-        $this->deleteUserShips($userId);
 
       return true;
     } catch (Exception $e) {
@@ -317,23 +309,6 @@ class AuthorizationManager
       return $row;
     } catch (Exception $e) {
       return null;
-    } finally {
-      $this->disconnect($connection, $statement);
-    }
-  }
-
-  public function deleteUserShips($userId)
-  {
-    try {
-      $connection = $this->connect();
-      $query = "DELETE FROM ships WHERE authorId = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("i", $userId);
-      $statement->execute();
-
-      return true;
-    } catch (Exception $e) {
-      return false;
     } finally {
       $this->disconnect($connection, $statement);
     }
