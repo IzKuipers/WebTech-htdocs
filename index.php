@@ -15,6 +15,9 @@
     <li>
       Klachtverwerking: <a href="/school/klachtverwerking">/klachtverwerking</a>
     </li>
+    <li>
+      Klachtverwerking v2: <a href="/school/klachtverwerking-extended">/klachtverwerking-extended</a>
+    </li>
   </ul>
 </body>
 </html>
