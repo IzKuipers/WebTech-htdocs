@@ -14,10 +14,10 @@
   <p>Navigate to one of the following projects stored in this repository:</p>
   <ul>
     <li>
-      HTML to PDF: <a href="/htmltopdf">/htmltopdf</a>
+      HTML to PDF: <a href="/school/htmltopdf">/htmltopdf</a>
     </li>
     <li>
-      Klachtverwerking: <a href="/klachtverwerking">/klachtverwerking</a>
+      Klachtverwerking: <a href="/school/klachtverwerking">/klachtverwerking</a>
     </li>
   </ul>
 </body>

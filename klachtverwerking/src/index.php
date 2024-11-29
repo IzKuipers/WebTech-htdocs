@@ -31,13 +31,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <h1>Klachtformulier</h1>
   <p>Heeft u een klacht? Vul dit formulier in en we nemen zo snel als mogelijk contact met u op:</p>
   <form action="" method="POST">
-    <label for="name">Uw naam:</label>
-    <input type="text" name="name" id="name">
-    <label for="email">Uw e-mailadres:</label>
-    <input type="email" name="email" id="email"> 
-    <label for="message">Uw klacht:</label>
-    <textarea name="message" id="message"></textarea>
-    <button type="submit">Klacht indienen</button>
+    <table>
+      <tr>
+        <td>
+          <label for="name">Uw naam:</label>
+        </td>
+        <td>
+          <input type="text" name="name" id="name"><br>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="email">Uw e-mailadres:</label>
+        </td>
+        <td>
+          <input type="email" name="email" id="email">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="message">Uw klacht:</label>
+        </td>
+        <td>
+          <textarea name="message" id="message"></textarea><br>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button type="submit">Klacht indienen</button>
+        </td>
+      </tr>
+    </table>
   </form>
 </body>
 </html>
