@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
   if ($confirm != $password) {
     Dialog(ErrorMessages::PasswordMismatch);
+
+    die;
   }
 
   $created = $authManager->createUser($username, $password);
