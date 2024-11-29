@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <h1>Spaceships</h1>
     <form action="" method="POST">
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" spellcheck="false">
+      <input type="text" id="username" name="username" spellcheck="false" required>
       <label for="password">Password:</label>
-      <input type="password" name="password" id="password">
+      <input type="password" name="password" id="password" required>
       <input type="submit" value="Login">
       <a href="/register.php" class="no-account">No account?</a>
     </form>

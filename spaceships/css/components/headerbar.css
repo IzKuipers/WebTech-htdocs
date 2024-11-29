@@ -1,0 +1,11 @@
+header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 30px 80px;
+  height: 100px;
+}
+
+header h1 {
+  margin-right: auto;
+}

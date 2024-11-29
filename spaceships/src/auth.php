@@ -1,7 +1,5 @@
 <?php
 
-namespace Spaceships;
-
 require_once "env.php";
 
 use Ramsey\Uuid\Uuid;
@@ -38,47 +36,50 @@ class AuthorizationManager
           `userId` int(11) NOT NULL,
           `value` varchar(64) NOT NULL,
           PRIMARY KEY (`id`),
+          UNIQUE KEY `value` (`value`),
           KEY `userId` (`userId`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-  
+        ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
         CREATE TABLE IF NOT EXISTS `users` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `username` varchar(64) NOT NULL,
           `hash` varchar(512) NOT NULL,
-          `savedata` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`savedata`)),
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-  
+          `favourites` mediumtext NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `username` (`username`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
         ALTER TABLE `tokens`
           ADD CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+        COMMIT;
       SQL;
 
       $connection->multi_query($query);
-    } catch (\Exception $e) {
-      throw new \Exception("Failed to initialize database: " . $e->getMessage());
+    } catch (Exception $e) {
+      throw new Exception("Failed to initialize database: " . $e->getMessage());
     } finally {
       $this->disconnect($connection);
 
     }
   }
 
-  public function connect(): \mysqli
+  public function connect(): mysqli
   {
-    $connection = new \mysqli($this->hostname, $this->username, $this->password, $this->database);
+    $connection = new mysqli($this->hostname, $this->username, $this->password, $this->database);
 
     if ($connection->connect_error) {
-      throw new \Exception("Failed to connect to database: " . $connection->connect_error);
+      throw new Exception("Failed to connect to database: " . $connection->connect_error);
     }
 
     return $connection;
   }
 
-  public function disconnect(\mysqli $connection, \mysqli_stmt $statement = null)
+  public function disconnect(mysqli $connection, \mysqli_stmt $statement = null)
   {
     if (isset($statement) && $statement instanceof mysqli_stmt) {
       try {
         $statement->close();
-      } catch (\Exception $e) {
+      } catch (Exception $e) {
         $e->getMessage();
         // silently error
       }
@@ -104,7 +105,7 @@ class AuthorizationManager
       $statement->execute();
 
       return $token;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return "";
     } finally {
       $this->disconnect($connection, $statement);
@@ -126,7 +127,7 @@ class AuthorizationManager
       }
 
       return true;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return false;
     } finally {
       $this->disconnect($connection, $statement);
@@ -144,7 +145,7 @@ class AuthorizationManager
       $statement->execute();
 
       return true;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return false;
     } finally {
       $this->disconnect($connection, $statement);
@@ -167,7 +168,7 @@ class AuthorizationManager
       $result = $statement->get_result();
 
       if ($result->num_rows == 0)
-        throw new \Exception("No such user '$username'");
+        throw new Exception("No such user '$username'");
 
       $row = $result->fetch_assoc();
       $hash = $row["hash"];
@@ -175,16 +176,16 @@ class AuthorizationManager
       $passwordValid = $this->verifyPassword($hash, $password);
 
       if (!$passwordValid)
-        throw new \Exception("Access denied for '$username'");
+        throw new Exception("Access denied for '$username'");
 
       $token = $this->createToken($row);
 
       if (strlen($token) == 0)
-        throw new \Exception("Failed to generate token");
+        throw new Exception("Failed to generate token");
 
       return $token;
-    } catch (\Exception $e) {
-      throw new \Exception("Authentication failed: " . $e->getMessage());
+    } catch (Exception $e) {
+      throw new Exception("Authentication failed: " . $e->getMessage());
     }
   }
 
@@ -212,8 +213,8 @@ class AuthorizationManager
       $statement = $connection->prepare($query);
       $statement->bind_param("sss", $safeUsername, $hash, $json);
       $statement->execute();
-    } catch (\Exception $e) {
-      throw new \Exception("Failed to create user: " . $e->getMessage());
+    } catch (Exception $e) {
+      throw new Exception("Failed to create user: " . $e->getMessage());
     } finally {
       $this->disconnect($connection, $statement);
     }
@@ -230,7 +231,7 @@ class AuthorizationManager
       $statement->execute();
 
       return true;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return false;
     } finally {
       $this->disconnect($connection, $statement);
@@ -254,7 +255,7 @@ class AuthorizationManager
       $userId = (int) $row["userId"];
 
       return $this->getUserById($userId);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return null;
     } finally {
       $this->disconnect($connection, $statement);
@@ -277,7 +278,7 @@ class AuthorizationManager
       $row = $result->fetch_assoc();
 
       return $row;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return null;
     } finally {
       $this->disconnect($connection, $statement);

@@ -1,17 +1,17 @@
 {
-    "name": "izaak/spaceships",
-    "autoload": {
-        "psr-4": {
-            "Izaak\\Spaceships\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Izaak Kuipers",
-            "email": "izaak.kuipers@gmail.com"
-        }
-    ],
-    "require": {
-        "ramsey/uuid": "^4.7"
+  "name": "izaak/spaceships",
+  "autoload": {
+    "psr-4": {
+      "Izaak\\Spaceships\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Izaak Kuipers",
+      "email": "izaak.kuipers@gmail.com"
+    }
+  ],
+  "require": {
+    "ramsey/uuid": "^4.7"
+  }
 }

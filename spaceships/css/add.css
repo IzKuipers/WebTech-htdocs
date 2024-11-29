@@ -1,0 +1,31 @@
+@import url("./base.css");
+
+main {
+  height: calc(100% - 100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+}
+
+main > form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+main label {
+  margin-top: 20px;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+main h1 {
+  font-size: 32px;
+}
+
+main input {
+  width: 350px;
+  max-width: 100%;
+}

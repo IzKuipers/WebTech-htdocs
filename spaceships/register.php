@@ -1,8 +1,6 @@
 <?php
 
-namespace Spaceships;
-use Spaceships\AuthorizationManager;
-
+require_once("src/auth.php");
 require_once("vendor/autoload.php");
 
 if (isset($_COOKIE["token"]) && $sessionManager->isLoggedIn($_COOKIE["token"])) {
@@ -22,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
   try {
     if ($confirm != $password)
-      throw new \Exception("Passwords don't match");
+      throw new Exception("Passwords don't match");
 
     $authManager = new AuthorizationManager();
     $authManager->createUser($username, $password);
 
     header("Location: login.php");
-  } catch (\Exception $e) {
+  } catch (Exception $e) {
     // TODO
     echo "Failed to create user: " . $e->getMessage();
   }
@@ -49,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <h1>Create Account</h1>
     <form action="" method="POST">
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" spellcheck="false">
+      <input type="text" id="username" name="username" spellcheck="false" required>
       <label for="password">Password:</label>
-      <input type="password" name="password" id="password">
+      <input type="password" name="password" id="password" required>
       <label for="password">Confirm password:</label>
-      <input type="password" name="confirm" id="confirm">
+      <input type="password" name="confirm" id="confirm" required>
       <input type="submit" value="Register">
       <a href="/login.php" class="no-account">Have an account?</a>
     </form>

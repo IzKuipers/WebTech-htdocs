@@ -1,0 +1,25 @@
+div.ship-list {
+  margin: 0 auto;
+  margin-top: 20px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 350px);
+  justify-content: center;
+}
+
+div.ship-list div.ship {
+  width: 300px;
+  max-width: 80%;
+}
+
+div.ship-list div.ship div.image {
+  background-position: center;
+  background-image: var(--src);
+  background-size: cover;
+  aspect-ratio: 4/3;
+  width: 100%;
+  outline: var(--accent) 2px solid;
+  outline-offset: 2px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
