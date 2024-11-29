@@ -2,7 +2,6 @@
 
 require_once "env.php";
 require_once "error.php";
-require_once "ship.php";
 
 use Ramsey\Uuid\Uuid;
 
@@ -242,7 +241,7 @@ class AuthorizationManager
       $statement->execute();
 
       if ($userId)
-        $shipStorage->deleteUserShips($userId);
+        $this->deleteUserShips($userId);
 
       return true;
     } catch (Exception $e) {
@@ -318,6 +317,23 @@ class AuthorizationManager
       return $row;
     } catch (Exception $e) {
       return null;
+    } finally {
+      $this->disconnect($connection, $statement);
+    }
+  }
+
+  public function deleteUserShips($userId)
+  {
+    try {
+      $connection = $this->connect();
+      $query = "DELETE FROM ships WHERE authorId = ?";
+      $statement = $connection->prepare($query);
+      $statement->bind_param("i", $userId);
+      $statement->execute();
+
+      return true;
+    } catch (Exception $e) {
+      return false;
     } finally {
       $this->disconnect($connection, $statement);
     }
