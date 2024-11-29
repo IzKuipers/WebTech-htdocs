@@ -2,6 +2,7 @@
 require_once "src/header.php";
 require_once "src/shiplist.php";
 require_once "src/adddialog.php";
+require_once "src/settings.php";
 require_once "src/ship.php";
 require_once "src/session.php";
 require_once "src/error.php";
@@ -11,6 +12,7 @@ showError();
 $sessionManager->checkIfLoggedIn();
 $user = $sessionManager->me();
 $ships = $shipStorage->getAllShips();
+$sessionManager->checkForRmAccRequest();
 
 ?>
 
@@ -29,7 +31,8 @@ $ships = $shipStorage->getAllShips();
   <main>
     <?php new ShipList($ships) ?>
   </main>
-  <?php new AddDialog() ?>
+  <?php new AddDialog();
+  new SettingsDialog() ?>
 </body>
 
 </html>

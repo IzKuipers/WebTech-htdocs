@@ -13,7 +13,7 @@ div.dialog-wrapper {
 
 div.dialog-wrapper div.dialog {
   border: var(--accent) 3px solid;
-  padding: 20px;
+  padding: 30px;
   border-radius: 4px;
   background-color: var(--bg);
   max-width: 500px;
@@ -23,7 +23,8 @@ div.dialog-wrapper div.dialog h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 24px;
 }
 
 div.dialog-wrapper div.dialog > p {
@@ -33,4 +34,10 @@ div.dialog-wrapper div.dialog > p {
 div.dialog-wrapper div.dialog h1 a {
   font-weight: normal;
   font-size: 18px;
+}
+
+div.dialog-wrapper div.dialog > a:last-child {
+  display: block;
+  margin-top: 20px;
+  float: right;
 }

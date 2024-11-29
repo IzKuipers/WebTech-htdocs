@@ -2,6 +2,7 @@
 
 require_once "env.php";
 require_once "error.php";
+require_once "ship.php";
 
 use Ramsey\Uuid\Uuid;
 
@@ -205,20 +206,21 @@ class AuthorizationManager
 
   public function createUser($username, $password)
   {
-    $json = "{}";
     $safeUsername = htmlspecialchars(trim($username));
     $hash = password_hash($password, PASSWORD_BCRYPT);
 
-    $query = "INSERT INTO users(username,hash,savedata) VALUES (?,?,?)";
+    $query = "INSERT INTO users(username,hash) VALUES (?,?)";
 
     try {
       global $connection, $statement;
       $connection = $this->connect();
       $statement = $connection->prepare($query);
-      $statement->bind_param("sss", $safeUsername, $hash, $json);
+      $statement->bind_param("ss", $safeUsername, $hash);
       $statement->execute();
+      return true;
     } catch (Exception $e) {
       Dialog(ErrorMessages::UserAlreadyExists);
+      return false;
     } finally {
       $this->disconnect($connection, $statement);
     }
@@ -226,6 +228,11 @@ class AuthorizationManager
 
   public function deleteUser(string $username)
   {
+    global $shipStorage;
+
+    $user = $this->getUserByName($username);
+    $userId = $user ? $user["id"] : "";
+
     try {
       global $connection, $statement;
       $connection = $this->connect();
@@ -233,6 +240,9 @@ class AuthorizationManager
       $statement = $connection->prepare($query);
       $statement->bind_param("s", $username);
       $statement->execute();
+
+      if ($userId)
+        $shipStorage->deleteUserShips($userId);
 
       return true;
     } catch (Exception $e) {
@@ -272,7 +282,31 @@ class AuthorizationManager
       $connection = $this->connect();
       $query = "SELECT * FROM users WHERE id = ?";
       $statement = $connection->prepare($query);
-      $statement->bind_param("s", $userId);
+      $statement->bind_param("i", $userId);
+      $statement->execute();
+      $result = $statement->get_result();
+
+      if ($result->num_rows == 0)
+        return null;
+
+      $row = $result->fetch_assoc();
+
+      return $row;
+    } catch (Exception $e) {
+      return null;
+    } finally {
+      $this->disconnect($connection, $statement);
+    }
+  }
+
+
+  public function getUserByName(string $username)
+  {
+    try {
+      $connection = $this->connect();
+      $query = "SELECT * FROM users WHERE username = ?";
+      $statement = $connection->prepare($query);
+      $statement->bind_param("s", $username);
       $statement->execute();
       $result = $statement->get_result();
 

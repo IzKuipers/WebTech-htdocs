@@ -1,6 +1,7 @@
 <?php
 
 require_once("src/auth.php");
+require_once("src/error.php");
 require_once("vendor/autoload.php");
 require_once("src/error.php");
 
@@ -21,19 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
   $password = $_POST["password"];
   $confirm = $_POST["confirm"];
 
-  try {
-    if ($confirm != $password)
-      throw new Exception("Passwords don't match");
+  if ($confirm != $password) {
+    Dialog(ErrorMessages::PasswordMismatch);
+  }
 
-    $authManager = new AuthorizationManager();
-    $authManager->createUser($username, $password);
+  $created = $authManager->createUser($username, $password);
 
+  if ($created) {
     $_SESSION["toast"] = 1;
     header("Location: login.php");
-  } catch (Exception $e) {
-    // TODO
-    echo "Failed to create user: " . $e->getMessage();
   }
+
 }
 ?>
 <!DOCTYPE html>

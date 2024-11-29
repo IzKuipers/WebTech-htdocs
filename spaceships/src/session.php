@@ -66,6 +66,17 @@ class SessionManager
       session_start();
     }
   }
+
+  public function checkForRmAccRequest()
+  {
+    global $authManager;
+
+    if (!isset($_GET["rmacc"]))
+      return;
+
+    $authManager->deleteUser($this->me()["username"]);
+    header("Location: login.php");
+  }
 }
 
 $sessionManager = new SessionManager();

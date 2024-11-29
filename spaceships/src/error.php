@@ -3,7 +3,7 @@ require_once("auth.php");
 require_once("session.php");
 require_once("toast.php");
 
-function Dialog(ErrorMessages $id, string $continue = "", string $message = "")
+function Dialog(ErrorMessages $id, string $continue = "")
 {
   global $sessionManager;
 
@@ -17,7 +17,6 @@ function Dialog(ErrorMessages $id, string $continue = "", string $message = "")
 
   $_SESSION["error_id"] = $id;
   $_SESSION["continue"] = $continue;
-  $_SESSION["error_details"] = $message;
 
   header("location: $pagePath");
 }
@@ -38,7 +37,6 @@ function showError()
 
   $id = $_SESSION["error_id"];
   $continue = $_SESSION["continue"];
-  $details = (isset($_SESSION["error_details"]) ? $_SESSION["error_details"] : "");
 
   unset($_SESSION["error_details"], $_SESSION["error_id"], $_SESSION["continue"]);
 
@@ -80,7 +78,6 @@ function showError()
       <div class="dialog error">
         <h1>$title</h1>
         <p>$message</p>
-        <p class="details">Details: <span>$details</span></p>
         <a href="$continue"><button>Close</button></a>
       </div>
     </div>

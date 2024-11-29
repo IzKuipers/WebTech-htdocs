@@ -113,6 +113,23 @@ class ShipStorage
       $this->authManager->disconnect($connection, $statement);
     }
   }
+
+  public function deleteUserShips($userId)
+  {
+    try {
+      $connection = $this->authManager->connect();
+      $query = "DELETE FROM ships WHERE authorId = ?";
+      $statement = $connection->prepare($query);
+      $statement->bind_param("i", $userId);
+      $statement->execute();
+
+      return true;
+    } catch (Exception $e) {
+      return false;
+    } finally {
+      $this->authManager->disconnect($connection, $statement);
+    }
+  }
 }
 
 $shipStorage = new ShipStorage($authManager);
