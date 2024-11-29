@@ -1,6 +1,8 @@
 <?php
-require_once("src/auth.php");
-require_once("src/session.php");
+
+namespace Spaceships;
+use Spaceships\AuthorizationManager;
+
 require_once("vendor/autoload.php");
 
 if (isset($_COOKIE["token"]) && $sessionManager->isLoggedIn($_COOKIE["token"])) {
@@ -20,13 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
   try {
     if ($confirm != $password)
-      throw new Exception("Passwords don't match");
+      throw new \Exception("Passwords don't match");
 
     $authManager = new AuthorizationManager();
     $authManager->createUser($username, $password);
 
     header("Location: login.php");
-  } catch (Exception $e) {
+  } catch (\Exception $e) {
     // TODO
     echo "Failed to create user: " . $e->getMessage();
   }
