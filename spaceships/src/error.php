@@ -91,4 +91,5 @@ enum ErrorMessages: int
   case ConnectionFailed = 3;
   case PasswordMismatch = 4;
   case UserAlreadyExists = 5;
+  case ShipNotFound = 6;
 }

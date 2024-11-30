@@ -113,6 +113,35 @@ class ShipStorage
       $this->authManager->disconnect($connection, $statement);
     }
   }
+
+  public function getShipById(int $shipId)
+  {
+    try {
+      $connection = $this->authManager->connect();
+      $query = $query = <<<SQL
+        SELECT 
+          ships.id,
+          ships.name,
+          ships.description,
+          ships.image,
+          users.username AS authorName,
+          ships.authorId AS authorId,
+          ships.timestamp
+        FROM ships
+        INNER JOIN users
+        ON ships.authorId = users.id
+        WHERE ships.id = $shipId
+      SQL;
+
+      $result = $connection->query($query)->fetch_all(MYSQLI_ASSOC)[0];
+
+      return $result;
+    } catch (Exception $e) {
+      return [];
+    } finally {
+      $this->authManager->disconnect($connection);
+    }
+  }
 }
 
 $shipStorage = new ShipStorage($authManager);

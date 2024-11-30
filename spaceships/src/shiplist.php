@@ -36,16 +36,17 @@ class ShipList extends Component
     $id = $ship["id"];
     $description = $ship["description"];
     $authorName = $ship["authorName"];
+    $authorId = $ship["authorId"];
     $timestamp = date("j M · G:i", strtotime($ship["timestamp"]));
     $shortDescription = truncateString($description, 32);
 
     $imageElement = "<div class='image' style='--src: url(\"data:image/png;base64,$image\");'></div>";
-    $nameElement = "<h1 class='name'><a href='ship.php?id=$id'>$name</a></h1>";
+    $nameElement = "<h1 class='name'><a href='viewship.php?id=$id'>$name</a></h1>";
     $descriptionElement = "<p class='description'>$shortDescription</h1>";
     $authorBit = <<<HTML
       <div class='author'>
         <div class="pill author-name"> 
-          $authorName
+          <a href='viewuser.php?id=$authorId'>$authorName</a>
         </div>
         <div class="pill timestamp">
           $timestamp

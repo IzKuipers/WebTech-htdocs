@@ -18,51 +18,11 @@ class AuthorizationManager
     $this->username = DB_USERNAME;
     $this->password = DB_PASSWORD;
     $this->database = DB_DATABASE;
-
-    $this->initializeDatabase();
   }
 
-  //////////////
-  // DATABASE //
-  //////////////
-
-  public function initializeDatabase()
-  {
-    try {
-
-      $connection = $this->connect();
-      $query = <<<SQL
-        CREATE TABLE IF NOT EXISTS `tokens` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `userId` int(11) NOT NULL,
-          `value` varchar(64) NOT NULL,
-          PRIMARY KEY (`id`),
-          UNIQUE KEY `value` (`value`),
-          KEY `userId` (`userId`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-        CREATE TABLE IF NOT EXISTS `users` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `username` varchar(64) NOT NULL,
-          `hash` varchar(512) NOT NULL,
-          `favourites` mediumtext NOT NULL,
-          PRIMARY KEY (`id`),
-          UNIQUE KEY `username` (`username`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-        ALTER TABLE `tokens`
-          ADD CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-        COMMIT;
-      SQL;
-
-      $connection->multi_query($query);
-    } catch (Exception $e) {
-      throw new Exception("Failed to initialize database: " . $e->getMessage());
-    } finally {
-      $this->disconnect($connection);
-
-    }
-  }
+  ////////////////
+  // CONNECTION //
+  ////////////////
 
   public function connect(): mysqli
   {
@@ -242,6 +202,10 @@ class AuthorizationManager
       $this->disconnect($connection, $statement);
     }
   }
+
+  /////////////
+  // GETTING //
+  /////////////
 
   public function getUserByToken(string $token)
   {
