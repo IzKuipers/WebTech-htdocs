@@ -6,24 +6,26 @@ require_once "src/lib/header.php";
 require_once "src/db/ship.php";
 require_once "src/lib/shiplist.php";
 
-$sessionManager->checkIfLoggedIn();
-$user = $sessionManager->me();
+$sessionManager->checkIfLoggedIn(); // Check if we're logged in
+$user = $sessionManager->me(); // Get the user
 
-$sessionManager->trySessionStart();
+$sessionManager->trySessionStart(); // Let's star tthe session
 
-if (!isset($_GET["id"])) {
+if (!isset($_GET["id"])) { // Is there no ID? Invalid request, go to index.
   header("location:index.php");
 }
 
+// Get the user by the specified ID
 $reqUser = $authManager->getUserById($_GET["id"]);
 
+// No such user? Display user not found v2 on index.php and stop.
 if (!$reqUser || count($reqUser) == 0) {
   Dialog(ErrorMessages::ReqUserNotFound, "index.php");
 
   die;
 }
 
-$userShips = $shipStorage->getShipsOfUser($reqUser);
+$userShips = $shipStorage->getShipsOfUser($reqUser); // Get the ships of the user
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +47,7 @@ $userShips = $shipStorage->getShipsOfUser($reqUser);
       </div>
       <h1 class="username"><?= $reqUser["username"] ?></h1>
     </div>
-    <?php new ShipList($userShips, false) ?>
+    <?php new ShipList($userShips, false) // Display the user's ships ?>
   </main>
 </body>
 

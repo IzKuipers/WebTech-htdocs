@@ -6,74 +6,90 @@ require_once __DIR__ . "/../ui/error.php";
 
 use Ramsey\Uuid\Uuid;
 
-class AuthorizationManager extends DatabaseModule
+/**
+ * AUTHORIZATION MANAGER
+ * 
+ * This class takes care of everything user related, from authorization to mutational operations.
+ */
+
+class AuthorizationManager extends DatabaseModule // It's a derivative of the DatabaseModule base class.
 {
   public function __construct()
   {
-    parent::__construct();
+    parent::__construct(); // Construct the parent as well
   }
 
   ////////////
   // TOKENS //
   ////////////
 
+  // This function creates a new token for a user
   public function createToken(array $user)
   {
-    $token = Uuid::uuid4()->toString();
+    $token = Uuid::uuid4()->toString(); // Generate the token
+
+    // Query: Insert a new token owned by ? with value ?
+    $query = "INSERT INTO tokens(value,userId) VALUES (?,?)";
+
 
     try {
-      $connection = $this->connect();
-      $query = "INSERT INTO tokens(value,userId) VALUES (?,?)";
-      $statement = $connection->prepare($query);
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Perpare the query
 
-      $statement->bind_param("si", $token, $user["id"]);
-      $statement->execute();
+      $statement->bind_param("si", $token, $user["id"]); // Bind the parameters
+      $statement->execute(); // Execute the query
 
-      return $token;
+      return $token; // Return the token
     } catch (Exception $e) {
-      return "";
+      return ""; // Error occured, return empty string to inform the calling code
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
+  // This function validates the given token
   public function validateToken(string $token): bool
   {
-    try {
-      $connection = $this->connect();
-      $query = "SELECT userId,id FROM tokens WHERE value = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("s", $token);
-      $statement->execute();
-      $result = $statement->get_result();
+    // Query: Select the userId and token ID from tokens where the token value is equal to ?
+    $query = "SELECT userId,id FROM tokens WHERE value = ?";
 
+    try {
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepate the query
+      $statement->bind_param("s", $token); // Bind the token value to ?
+      $statement->execute(); // Execute the statement
+      $result = $statement->get_result(); // Get the result
+
+      // 0 returned rows? Token invalid.
       if ($result->num_rows == 0) {
         return false;
       }
 
-      return true;
+      return true; // Token valid
     } catch (Exception $e) {
-      return false;
+      return false; // Error occured, token invalid
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
+  // This function discontinues the specified token
   public function discontinueToken(string $token): bool
   {
+    // Query: Delete all tokens whose value is equal to ?
+    $query = "DELETE FROM tokens WHERE value = ?";
+
     try {
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("s", $token); // Bind the token to ?
+      $statement->execute(); // Execute the statement
 
-      $connection = $this->connect();
-      $query = "DELETE FROM tokens WHERE value = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("s", $token);
-      $statement->execute();
-
-      return true;
+      return true; // Discontinued, return true
     } catch (Exception $e) {
-      return false;
+      return false; // Error occured, return false
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
@@ -81,43 +97,52 @@ class AuthorizationManager extends DatabaseModule
   // AUTHENTICATION //
   ////////////////////
 
+  // This function authenticates the user by checking the username and password. It returns a token if the credentials are correct.
   public function authenticateUser(string $username, string $password): string
   {
+    // Query: Get the username, password hash and ID of the users whose username matches ?
+    $query = "SELECT username,hash,id FROM users WHERE username = ?";
+
     try {
-      $connection = $this->connect();
-      $query = "SELECT username,hash,id FROM users WHERE username = ?";
-      $statement = $connection->prepare($query);
+      $connection = $this->connect();// Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
 
-      $statement->bind_param("s", $username);
-      $statement->execute();
-      $result = $statement->get_result();
+      $statement->bind_param("s", $username); // Bind the username
+      $statement->execute(); // execute the statement
+      $result = $statement->get_result(); // Get the result
 
+      // 0 returned rows? Show user not found dialog.
       if ($result->num_rows == 0) {
         Dialog(ErrorMessages::UserNotFound);
 
         return "";
       }
 
-      $row = $result->fetch_assoc();
-      $hash = $row["hash"];
+      $row = $result->fetch_assoc(); // Fetch the result as an associative array
+      $hash = $row["hash"]; // Get the user's password hash
 
+      // Verify the hash
       $passwordValid = $this->verifyPassword($hash, $password);
 
+      // Password invalid? Show password incorrect dialog.
       if (!$passwordValid) {
         Dialog(ErrorMessages::PasswordIncorrect);
 
         return "";
       }
 
+      // Let's now create a fresh token
       $token = $this->createToken($row);
 
-      return $token;
+      return $token; // Return the created token
     } catch (Exception $e) {
       return "";
+    } finally {
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
-
+  // This function verifies the password using its hash
   public function verifyPassword(string $hash, string $password): bool
   {
     return password_verify($password, $hash);
@@ -127,43 +152,49 @@ class AuthorizationManager extends DatabaseModule
   // USER MUTATION //
   ///////////////////
 
+  // This function creates a fresh user using a username and password
   public function createUser($username, $password)
   {
-    $safeUsername = htmlspecialchars(trim($username));
-    $hash = password_hash($password, PASSWORD_BCRYPT);
+    $safeUsername = htmlspecialchars(trim($username)); // Prevent XSS by escaping the username
+    $hash = password_hash($password, PASSWORD_BCRYPT); // Hash the password using bcrypt
 
+    // Query: Insert a new user with username ? and password hash ?
     $query = "INSERT INTO users(username,hash) VALUES (?,?)";
 
     try {
-      global $connection, $statement;
-      $connection = $this->connect();
-      $statement = $connection->prepare($query);
-      $statement->bind_param("ss", $safeUsername, $hash);
-      $statement->execute();
-      return true;
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("ss", $safeUsername, $hash); // Bind the safe username and password hash
+      $statement->execute(); // Execute the statement
+
+      return true; // User created
     } catch (Exception $e) {
+      // The only real error that can occur here is a conflict of the UNIQUE of `username`, so tell the user that the user already exists
       Dialog(ErrorMessages::UserAlreadyExists);
-      return false;
+
+      return false; // User not created
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
+  // This function deletes the user by their username. Because of CASCADE, the posts and tokens of this user will also be deleted.
   public function deleteUser(string $username)
   {
-    try {
-      global $connection, $statement;
-      $connection = $this->connect();
-      $query = "DELETE FROM users WHERE username = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("s", $username);
-      $statement->execute();
+    // Query: Delete all users whose username matches ?
+    $query = "DELETE FROM users WHERE username = ?";
 
-      return true;
+    try {
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("s", $username); // Bind the username to ?
+      $statement->execute(); // Execute the statement
+
+      return true; // Deleted, return true
     } catch (Exception $e) {
-      return false;
+      return false; // Not deleted, return false
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
@@ -171,93 +202,111 @@ class AuthorizationManager extends DatabaseModule
   // GETTING //
   /////////////
 
+  // This function gets the user by their token
   public function getUserByToken(string $token)
   {
+    // Query: Select the user ID of all tokens whose value is equal to ?
+    $query = "SELECT userId FROM tokens WHERE value = ?";
+
     try {
-      $connection = $this->connect();
-      $query = "SELECT userId FROM tokens WHERE value = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("s", $token);
-      $statement->execute();
-      $result = $statement->get_result();
+      $connection = $this->connect(); // Connec to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("s", $token); // Bind the token
+      $statement->execute(); // Execute the statement
+      $result = $statement->get_result(); // Get the result
 
+      // 0 returned rows? No user. Return an empty array.
       if ($result->num_rows == 0)
-        return null;
+        return [];
 
+      // Fetch the result as an associative array
       $row = $result->fetch_assoc();
-      $userId = (int) $row["userId"];
+      $userId = (int) $row["userId"]; // Get the user ID from the assoc
 
-      return $this->getUserById($userId);
+      return $this->getUserById($userId); // Get the user by ID and return the result
     } catch (Exception $e) {
-      return null;
+      return []; // Error occured, return empty
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
+  // This function gets the user by their ID
   public function getUserById(int $userId)
   {
+    // Query: Select all users whose ID matches ?
+    $query = "SELECT * FROM users WHERE id = ?";
+
     try {
-      $connection = $this->connect();
-      $query = "SELECT * FROM users WHERE id = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("i", $userId);
-      $statement->execute();
-      $result = $statement->get_result();
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("i", $userId); // Bind the user ID to ?
+      $statement->execute(); // Execute the statement
+      $result = $statement->get_result(); // Get the result
 
+      // 0 returned rows? No user. Return an empty array.
       if ($result->num_rows == 0)
-        return null;
+        return [];
 
+      // Fetch the result as an associative array
       $row = $result->fetch_assoc();
 
-      return $row;
+      return $row; // Return the assoc
     } catch (Exception $e) {
-      return null;
+      return []; // Error occured, return empty array
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
-
+  // This function gets the user by their username
   public function getUserByName(string $username)
   {
+    // Query: Select all users whose username matches ?
+    $query = "SELECT * FROM users WHERE username = ?";
+
     try {
-      $connection = $this->connect();
-      $query = "SELECT * FROM users WHERE username = ?";
-      $statement = $connection->prepare($query);
-      $statement->bind_param("s", $username);
-      $statement->execute();
-      $result = $statement->get_result();
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("i", $username); // Bind the username to ?
+      $statement->execute(); // Execute the statement
+      $result = $statement->get_result(); // Get the result
 
+      // 0 returned rows? No user. Return an empty array.
       if ($result->num_rows == 0)
-        return null;
+        return [];
 
+      // Fetch the result as an associative array
       $row = $result->fetch_assoc();
 
-      return $row;
+      return $row; // Return the assoc
     } catch (Exception $e) {
-      return null;
+      return []; // Error occured, return empty array
     } finally {
-      $this->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement); // Close the connection and statement
     }
   }
 
+  // This function resets the user by deleting their tokens and ships
   public function resetUser(array $user)
   {
-    $userId = $user["id"];
+    $userId = $user["id"]; // Get the user ID from the assoc
+
+    // Query: Delete all tokens and all ships owned by $userId
+    $query = "DELETE FROM tokens WHERE userId = $userId; DELETE FROM ships WHERE authorId = $userId;";
 
     try {
-      $connection = $this->connect();
-      $query = "DELETE FROM tokens WHERE userId = $userId; DELETE FROM ships WHERE authorId = $userId;";
-      $connection->multi_query($query);
+      $connection = $this->connect(); // Connect to the database
+      $connection->multi_query($query); // Execute the query as multi because we have two queries in one interaction
 
-      return true;
+      return true; // Reset done, return true
     } catch (Exception $e) {
-      throw new Exception($e->getMessage());
+      return false; // Reset failed, return false
     } finally {
-      $this->disconnect($connection);
+      $this->disconnect($connection);// Close the connection
     }
   }
 }
 
+// Global instance of the AuthorizationManager
 $authManager = new AuthorizationManager();

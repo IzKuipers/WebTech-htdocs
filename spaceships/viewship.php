@@ -5,17 +5,19 @@ require_once "src/ui/error.php";
 require_once "src/lib/header.php";
 require_once "src/db/ship.php";
 
-$sessionManager->checkIfLoggedIn();
-$user = $sessionManager->me();
+$sessionManager->checkIfLoggedIn(); // Check if we're logged in
+$user = $sessionManager->me(); // Get the user via their token
 
-$sessionManager->trySessionStart();
+$sessionManager->trySessionStart(); // Let's start the session
 
-if (!isset($_GET["id"])) {
+if (!isset($_GET["id"])) { // Is there no ID? Invalid request, go to index.
   header("location:index.php");
 }
 
+// Get the ship by the specified ID
 $ship = $shipStorage->getShipById($_GET["id"]);
 
+// No such ship? Display ship not found on index.php and stop.
 if (count($ship) == 0) {
   Dialog(ErrorMessages::ShipNotFound, "index.php");
 

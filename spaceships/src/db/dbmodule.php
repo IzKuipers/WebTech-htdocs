@@ -2,13 +2,19 @@
 
 include_once __DIR__ . "/../../env.php";
 
+/**
+ * DATABASE MODULE
+ * 
+ * This base class contains basic functions for connecting to and disconnecting
+ * from the database. The credentials are pulled from the env.php file.
+ */
 
 class DatabaseModule
 {
-  private string $hostname;
-  private string $username;
-  private string $password;
-  private string $database;
+  private string $hostname; // SQL hostname
+  private string $username; // Username
+  private string $password; // Password
+  private string $database; // Database
 
   public function __construct()
   {
@@ -18,28 +24,34 @@ class DatabaseModule
     $this->database = DB_DATABASE;
   }
 
+  // This function returns a mysqli instance, connected using the credentials
+  // stored in the class instance. It throws an error if connection failed.
   public function connect(): mysqli
   {
+    // Create mysqli class instance
     $connection = new mysqli($this->hostname, $this->username, $this->password, $this->database);
 
+    // Connection error? Throw it.
     if ($connection->connect_error) {
-      throw new Exception("Failed to connect to database: " . $connection->connect_error);
+      throw new Exception((string) "Failed to connect to database: " . $connection->connect_error);
     }
 
+    // Return the class instance
     return $connection;
   }
 
-  public function disconnect(mysqli $connection, \mysqli_stmt $statement = null)
+  // This function closes a provided mysqli instand and optionally a mysqli statement
+  public function disconnect(mysqli $connection, mysqli_stmt $statement = null)
   {
+    // Is there a statement?
     if (isset($statement) && $statement instanceof mysqli_stmt) {
       try {
-        $statement->close();
+        $statement->close(); // Close it.
       } catch (Exception $e) {
-        $e->getMessage();
         // silently error
       }
     }
 
-    $connection->close();
+    $connection->close(); // Close the database connection
   }
 }
