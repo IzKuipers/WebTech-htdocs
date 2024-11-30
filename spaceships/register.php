@@ -3,7 +3,6 @@
 require_once("src/db/auth.php");
 require_once("src/ui/error.php");
 require_once("vendor/autoload.php");
-require_once("src/error.php");
 
 showError();
 

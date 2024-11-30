@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/../../env.php";
 include_once "dbmodule.php";
-require_once __DIR__ . "/../error.php";
+require_once __DIR__ . "/../ui/error.php";
 
 use Ramsey\Uuid\Uuid;
 
