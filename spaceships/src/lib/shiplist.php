@@ -3,55 +3,60 @@
 require_once "component.php";
 require_once __DIR__ . "/../util.php";
 
-class ShipList extends Component
+class ShipList extends Component // is a derivative of the Component base class
 {
-  public array $ships = [];
-  public bool $linkToUser = true;
+  public array $ships = []; // The list of ships to display
+  public bool $linkToUser = true; // Determines if we add a link to the user's profile to author-name pill
 
   public function __construct(array $ships, bool $linkToUser = true)
   {
-    parent::__construct("css/components/shiplist.css");
+    parent::__construct("css/components/shiplist.css"); // Construct the parent
 
-    $this->ships = $ships;
-    $this->name = "ShipList";
-    $this->linkToUser = $linkToUser;
+    $this->ships = $ships; // Set the ships to be rendered
+    $this->name = "ShipList"; // Set the name
+    $this->linkToUser = $linkToUser; // Set linkToUser
 
-    $this->_renderComponent();
+    $this->_renderComponent(); // Let's now render the component
   }
 
   public function render()
   {
-    $result = "<div class='ship-list'>";
+    $result = "<div class='ship-list'>"; // The resulting HTML
 
+    // No ships? Append no-ships to the HTML
     if (count($this->ships) === 0) {
       $result .= $this->_noShips();
     } else {
+      // Otherwise; for every ship of ships...
       foreach ($this->ships as $ship) {
+        // ...Render the ship and append it to the HTML
         $result .= $this->_ship($ship);
       }
     }
 
+    // Close the div
     $result .= "</div>";
 
+    // Return the result
     return $result;
   }
 
   private function _ship(array $ship)
   {
-    $image = base64_encode($ship["image"]);
-    $name = $ship["name"];
-    $id = $ship["id"];
-    $description = $ship["description"];
-    $authorName = $ship["authorName"];
-    $authorId = $ship["authorId"];
-    $timestamp = date("j M · G:i", strtotime($ship["timestamp"]));
-    $shortDescription = truncateString($description, 32);
+    $image = base64_encode($ship["image"]); // The raw image data, encoded as base64
+    $name = $ship["name"]; // The name of the ship
+    $id = $ship["id"]; // The ID of the ship
+    $description = $ship["description"]; // The description of the ship
+    $authorName = $ship["authorName"]; // The name of the author
+    $authorId = $ship["authorId"]; // The ID of the author
+    $timestamp = date("j M Y · G:i", strtotime($ship["timestamp"])); // The date and time that the ship was posted
+    $shortDescription = truncateString($description, 32); // Truncated version of the descripion with a max length of 32 characters
 
-    $authorLink = $this->linkToUser ? "<a href='viewuser.php?id=$authorId'>$authorName</a>" : $authorName;
+    $authorLink = $this->linkToUser ? "<a href='viewuser.php?id=$authorId'>$authorName</a>" : $authorName; // The author's name (a link if linkToUser is set)
 
-    $imageElement = "<div class='image' style='--src: url(\"data:image/png;base64,$image\");'></div>";
-    $nameElement = "<h1 class='name'><a href='viewship.php?id=$id'>$name</a></h1>";
-    $descriptionElement = "<p class='description'>$shortDescription</h1>";
+    $imageElement = "<div class='image' style='--src: url(\"data:image/png;base64,$image\");'></div>"; // The ship's image
+    $nameElement = "<h1 class='name'><a href='viewship.php?id=$id'>$name</a></h1>"; // the name element of the ship, with a link to viewship
+    $descriptionElement = "<p class='description'>$shortDescription</h1>"; // The short description of the ship
     $authorBit = <<<HTML
       <div class='author'>
         <div class="pill author-name"> 
@@ -61,7 +66,7 @@ class ShipList extends Component
           $timestamp
         </div>
       </div>
-    HTML;
+    HTML; // The author pills
 
     $result = <<<HTML
       <div class='ship'>
@@ -70,11 +75,12 @@ class ShipList extends Component
         $descriptionElement
         $authorBit
       </div>
-    HTML;
+    HTML; // The resulting HTML
 
-    return $result;
+    return $result; // Return the resulting HTML
   }
 
+  // This function returns HTML for the no-ships div, in case the list is empty
   private function _noShips()
   {
     return <<<HTML

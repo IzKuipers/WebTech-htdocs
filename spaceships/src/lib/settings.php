@@ -3,30 +3,32 @@
 require_once "component.php";
 require_once __DIR__ . "/../session.php";
 
-class SettingsDialog extends Component
+class SettingsDialog extends Component // is a derivative of the Component base class
 {
   public function __construct()
   {
-    parent::__construct("css/components/settings.css");
+    parent::__construct("css/components/settings.css"); // Initialize the parent
 
-    $this->name = "SettingsDialog";
+    $this->name = "SettingsDialog"; // Set the name
 
-    $this->_renderComponent();
+    $this->_renderComponent(); // Let's now render the component
   }
 
   public function render(): string
   {
-    global $sessionManager;
+    global $sessionManager; // SessionManager
 
-    $user = $sessionManager->me();
+    // No settings request in the GET? Return an empty component.
+    if (!isset($_GET['settings']))
+      return "";
 
+    $user = $sessionManager->me(); // Get the current user
+
+    // No user? Return an empty component.
     if (!$user)
       return "";
 
-    $username = $user["username"];
-
-    if (!isset($_GET['settings']))
-      return "";
+    $username = $user["username"]; // Get the username
 
     return <<<HTML
       <div class="dialog-wrapper">

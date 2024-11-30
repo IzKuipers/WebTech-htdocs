@@ -2,15 +2,15 @@
 
 require_once "component.php";
 
-class AddDialog extends Component
+class AddDialog extends Component // is a derivative of the Component base class
 {
   public function __construct()
   {
-    parent::__construct("css/components/adddialog.css");
+    parent::__construct("css/components/adddialog.css"); // Construct the parent
 
-    $this->name = "AddDialog";
+    $this->name = "AddDialog"; // Set the name of the component
 
-    $this->_renderComponent();
+    $this->_renderComponent(); // Let's now render the component
   }
 
   public function render(): string
