@@ -29,6 +29,7 @@ div.dialog-wrapper div.dialog h1 {
 
 div.dialog-wrapper div.dialog > p {
   margin-bottom: 10px;
+  line-height: 28px;
 }
 
 div.dialog-wrapper div.dialog h1 a {

@@ -34,7 +34,7 @@ class HeaderBar extends Component
       $result .= <<<HTML
         <a href="index.php?adddialog" class="add-ship">
           <button>
-            Add ship...
+            Post Ship
           </button>
         </a>
       HTML;

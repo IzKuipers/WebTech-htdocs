@@ -92,4 +92,5 @@ enum ErrorMessages: int
   case PasswordMismatch = 4;
   case UserAlreadyExists = 5;
   case ShipNotFound = 6;
+  case ReqUserNotFound = 7;
 }

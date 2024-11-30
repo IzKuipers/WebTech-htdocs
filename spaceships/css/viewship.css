@@ -12,7 +12,7 @@ main.view-ship h1 {
 }
 
 main.view-ship div.author {
-  margin: 15px 0;
+  margin-top: 15px;
   opacity: 0.5;
 }
 
@@ -26,5 +26,10 @@ main.view-ship div.image {
   outline: var(--bg) 2px solid;
   outline-offset: -4px;
   border-radius: 6px;
-  margin-bottom: 20px;
+  margin: 30px 0;
+}
+
+main.view-ship p {
+  white-space: pre-wrap;
+  line-height: 30px;
 }

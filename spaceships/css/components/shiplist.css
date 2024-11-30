@@ -7,8 +7,6 @@ div.ship-list {
   justify-content: center;
   gap: 40px;
   padding: 40px;
-  overflow-y: scroll;
-  height: 100%;
 }
 
 div.ship-list div.ship {

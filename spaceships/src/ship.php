@@ -52,7 +52,7 @@ class ShipStorage
           ships.name,
           ships.description,
           ships.image,
-          users.username AS authorName
+          users.username AS authorName,
           ships.authorId AS authorId,
           ships.timestamp
         FROM ships
@@ -133,9 +133,12 @@ class ShipStorage
         WHERE ships.id = $shipId
       SQL;
 
-      $result = $connection->query($query)->fetch_all(MYSQLI_ASSOC)[0];
+      $result = $connection->query($query)->fetch_all(MYSQLI_ASSOC);
 
-      return $result;
+      if (count($result) === 0)
+        return [];
+
+      return $result[0];
     } catch (Exception $e) {
       return [];
     } finally {
