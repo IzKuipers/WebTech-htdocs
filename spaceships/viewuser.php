@@ -1,10 +1,10 @@
 <?php
 
 require_once "src/session.php";
-require_once "src/error.php";
-require_once "src/header.php";
-require_once "src/ship.php";
-require_once "src/shiplist.php";
+require_once "src/ui/error.php";
+require_once "src/lib/header.php";
+require_once "src/db/ship.php";
+require_once "src/lib/shiplist.php";
 
 $sessionManager->checkIfLoggedIn();
 $user = $sessionManager->me();
@@ -45,7 +45,7 @@ $userShips = $shipStorage->getShipsOfUser($reqUser);
       </div>
       <h1 class="username"><?= $reqUser["username"] ?></h1>
     </div>
-    <?php new ShipList($userShips) ?>
+    <?php new ShipList($userShips, false) ?>
   </main>
 </body>
 

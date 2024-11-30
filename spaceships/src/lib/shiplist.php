@@ -1,17 +1,20 @@
 <?php
 
 require_once "component.php";
-require_once "util.php";
+require_once __DIR__ . "/../util.php";
 
 class ShipList extends Component
 {
-  public array $ships;
-  public function __construct(array $ships)
+  public array $ships = [];
+  public bool $linkToUser = true;
+
+  public function __construct(array $ships, bool $linkToUser = true)
   {
     parent::__construct("css/components/shiplist.css");
 
     $this->ships = $ships;
     $this->name = "ShipList";
+    $this->linkToUser = $linkToUser;
 
     $this->_renderComponent();
   }
@@ -44,13 +47,15 @@ class ShipList extends Component
     $timestamp = date("j M · G:i", strtotime($ship["timestamp"]));
     $shortDescription = truncateString($description, 32);
 
+    $authorLink = $this->linkToUser ? "<a href='viewuser.php?id=$authorId'>$authorName</a>" : $authorName;
+
     $imageElement = "<div class='image' style='--src: url(\"data:image/png;base64,$image\");'></div>";
     $nameElement = "<h1 class='name'><a href='viewship.php?id=$id'>$name</a></h1>";
     $descriptionElement = "<p class='description'>$shortDescription</h1>";
     $authorBit = <<<HTML
       <div class='author'>
         <div class="pill author-name"> 
-          <a href='viewuser.php?id=$authorId'>$authorName</a>
+          $authorLink
         </div>
         <div class="pill timestamp">
           $timestamp

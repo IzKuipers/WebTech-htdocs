@@ -1,7 +1,6 @@
 <?php
 
-require_once "auth.php";
-
+require_once "db/auth.php";
 
 class SessionManager
 {
@@ -85,7 +84,12 @@ class SessionManager
     if (!isset($_GET["accreset"]))
       return;
 
-    $authManager->resetUser($this->me());
+    $me = $this->me();
+
+    if (!$me)
+      return;
+
+    $authManager->resetUser($me);
     $this->logout();
   }
 }

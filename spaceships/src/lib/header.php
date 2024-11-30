@@ -1,7 +1,7 @@
 <?php
 
 require_once "component.php";
-require_once "session.php";
+require_once __DIR__ . "/../session.php";
 
 class HeaderBar extends Component
 {
@@ -22,6 +22,10 @@ class HeaderBar extends Component
     global $sessionManager;
 
     $user = $sessionManager->me();
+
+    if (!$user)
+      return;
+
     $username = $user["username"];
     $result = <<<HTML
       <header>

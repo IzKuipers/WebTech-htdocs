@@ -1,6 +1,6 @@
 <?php
-require_once "session.php";
-require_once "auth.php";
+require_once __DIR__ . "/../session.php";
+require_once __DIR__ . "/../db/auth.php";
 
 function displayToastMessage()
 {

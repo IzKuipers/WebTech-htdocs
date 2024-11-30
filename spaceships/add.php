@@ -1,6 +1,6 @@
 <?php
 require_once "src/session.php";
-require_once "src/ship.php";
+require_once "src/db/ship.php";
 
 $sessionManager->checkIfLoggedIn();
 $user = $sessionManager->me();

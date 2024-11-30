@@ -14,6 +14,8 @@ div.ship-list div.ship {
   height: 350px;
   border: var(--border-clr) 1px solid;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 div.ship-list div.ship div.image {
@@ -36,6 +38,7 @@ div.ship-list div.ship * {
 
 div.ship-list div.ship h1.name {
   white-space: nowrap;
+  margin-bottom: 10px;
 }
 
 div.ship-list div.ship p.description {
@@ -45,7 +48,7 @@ div.ship-list div.ship p.description {
 div.ship-list div.ship div.author {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: auto;
 }
 
 div.ship-list div.ship div.author div.pill {

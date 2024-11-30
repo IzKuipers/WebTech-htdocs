@@ -1,20 +1,16 @@
 <?php
 
-require_once "auth.php";
-
-class ShipStorage
+class ShipStorage extends DatabaseModule
 {
-  private AuthorizationManager $authManager;
-
-  public function __construct(AuthorizationManager $authManager)
+  public function __construct()
   {
-    $this->authManager = $authManager;
+    parent::__construct();
   }
 
   public function getAllShips(): array
   {
     try {
-      $connection = $this->authManager->connect();
+      $connection = $this->connect();
       $query = <<<SQL
         SELECT 
           ships.id,
@@ -37,7 +33,7 @@ class ShipStorage
     } catch (Exception $e) {
       return [];
     } finally {
-      $this->authManager->disconnect($connection);
+      $this->disconnect($connection);
     }
   }
 
@@ -45,7 +41,7 @@ class ShipStorage
   {
     $userId = $user["id"];
     try {
-      $connection = $this->authManager->connect();
+      $connection = $this->connect();
       $query = $query = <<<SQL
         SELECT 
           ships.id,
@@ -67,7 +63,7 @@ class ShipStorage
     } catch (Exception $e) {
       return [];
     } finally {
-      $this->authManager->disconnect($connection);
+      $this->disconnect($connection);
     }
   }
 
@@ -81,7 +77,7 @@ class ShipStorage
     $imageContents = file_get_contents($imageTemp);
 
     try {
-      $connection = $this->authManager->connect();
+      $connection = $this->connect();
       $query = "INSERT INTO ships(authorId,name,description,image) VALUES (?,?,?,?)";
       $statement = $connection->prepare($query);
       $statement->bind_param("issb", $userId, $safeName, $safeDescription, $null);
@@ -93,14 +89,14 @@ class ShipStorage
       throw new Exception($e->getMessage());
       // return false;
     } finally {
-      $this->authManager->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement);
     }
   }
 
   public function deleteShip(int $shipId)
   {
     try {
-      $connection = $this->authManager->connect();
+      $connection = $this->connect();
       $query = "DELETE FROM ships WHERE id = ?";
       $statement = $connection->prepare($query);
       $statement->bind_param("i", $shipId);
@@ -110,14 +106,14 @@ class ShipStorage
     } catch (Exception $e) {
       return false;
     } finally {
-      $this->authManager->disconnect($connection, $statement);
+      $this->disconnect($connection, $statement);
     }
   }
 
   public function getShipById(int $shipId)
   {
     try {
-      $connection = $this->authManager->connect();
+      $connection = $this->connect();
       $query = $query = <<<SQL
         SELECT 
           ships.id,
@@ -142,9 +138,9 @@ class ShipStorage
     } catch (Exception $e) {
       return [];
     } finally {
-      $this->authManager->disconnect($connection);
+      $this->disconnect($connection);
     }
   }
 }
 
-$shipStorage = new ShipStorage($authManager);
+$shipStorage = new ShipStorage();

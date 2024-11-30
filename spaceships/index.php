@@ -1,11 +1,11 @@
 <?php
-require_once "src/header.php";
-require_once "src/shiplist.php";
-require_once "src/adddialog.php";
-require_once "src/settings.php";
-require_once "src/ship.php";
+require_once "src/lib/header.php";
+require_once "src/lib/shiplist.php";
+require_once "src/lib/adddialog.php";
+require_once "src/lib/settings.php";
+require_once "src/db/ship.php";
 require_once "src/session.php";
-require_once "src/error.php";
+require_once "src/ui/error.php";
 
 showError();
 

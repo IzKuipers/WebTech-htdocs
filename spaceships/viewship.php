@@ -1,9 +1,9 @@
 <?php
 
 require_once "src/session.php";
-require_once "src/error.php";
-require_once "src/header.php";
-require_once "src/ship.php";
+require_once "src/ui/error.php";
+require_once "src/lib/header.php";
+require_once "src/db/ship.php";
 
 $sessionManager->checkIfLoggedIn();
 $user = $sessionManager->me();
