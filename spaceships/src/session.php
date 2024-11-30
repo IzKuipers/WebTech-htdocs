@@ -77,6 +77,17 @@ class SessionManager
     $authManager->deleteUser($this->me()["username"]);
     header("Location: login.php");
   }
+
+  public function checkForAccResetRequest()
+  {
+    global $authManager;
+
+    if (!isset($_GET["accreset"]))
+      return;
+
+    $authManager->resetUser($this->me());
+    $this->logout();
+  }
 }
 
 $sessionManager = new SessionManager();

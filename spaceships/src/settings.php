@@ -32,13 +32,19 @@ class SettingsDialog extends Component
       <div class="dialog-wrapper">
         <div class="dialog settings">
           <h1>
-          <span>Account settings of $username</span>
-          <a href="index.php">[x]</a>
+            <span>Account settings of $username</span>
+            <a href="index.php">[x]</a>
           </h1>
-          <p>To delete your Spaceships account, click the below button. This will delete your account, but it won't delete the spaceships you've added.</p>
+          <p>To delete your Spaceships account, click the below button. This will delete your account and all of your ships.</p>
           <a href="index.php?rmacc">
             <button class="delete-account">Delete Account</button>
           </a>
+          <hr>
+          <p>You can use the following button to reset your account. This will log you out everywhere, and delete all of your ships, but it won't delete your account.</p>
+          <a href="index.php?accreset">
+            <button class="reset-account">Reset account</button>
+          </a>
+          <br>
         </div>
       </div>
     HTML;

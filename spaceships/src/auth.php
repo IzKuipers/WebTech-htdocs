@@ -277,6 +277,23 @@ class AuthorizationManager
       $this->disconnect($connection, $statement);
     }
   }
+
+  public function resetUser(array $user)
+  {
+    $userId = $user["id"];
+
+    try {
+      $connection = $this->connect();
+      $query = "DELETE FROM tokens WHERE userId = $userId; DELETE FROM posts WHERE authorId = $userId;";
+      $connection->multi_query($query);
+
+      return true;
+    } catch (Exception $e) {
+      return false;
+    } finally {
+      $this->disconnect($connection);
+    }
+  }
 }
 
 $authManager = new AuthorizationManager();
