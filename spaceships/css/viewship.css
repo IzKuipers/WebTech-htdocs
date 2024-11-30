@@ -33,3 +33,25 @@ main.view-ship p {
   white-space: pre-wrap;
   line-height: 30px;
 }
+
+main.view-ship div.manage-ship {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+main.view-ship div.manage-ship a {
+  text-decoration: none;
+}
+
+main.view-ship div.manage-ship button.delete {
+  background-color: tomato;
+}
+
+main.view-ship div.manage-ship button.delete:hover {
+  background-color: rgb(255, 159, 142);
+}
+
+main.view-ship div.manage-ship button.delete:active {
+  background-color: rgb(119, 35, 20);
+}

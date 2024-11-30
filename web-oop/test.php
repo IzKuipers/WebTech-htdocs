@@ -8,10 +8,6 @@ require_once "Klas.php";
 
 use Dompdf\Dompdf;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $piet = new Student("Piet van Pietersen", 21917);
 $jan = new Student("Jan van Dam", 71093);
 $joop = new Student("Joop Janssen", 27196);

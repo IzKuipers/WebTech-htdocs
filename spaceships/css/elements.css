@@ -11,14 +11,19 @@ a:hover {
   text-underline-offset: 3px;
 }
 
+a.button,
 button,
 input[type="submit"] {
+  display: inline-block;
   padding: 8px 10px;
   background-color: var(--accent);
   color: var(--bg);
   border-radius: 3px;
+  text-decoration: none;
+  transition: background-color 0.3s !important;
 }
 
+a.button:hover,
 button:hover,
 input[type="submit"]:hover {
   background-color: var(--accent-secondary);
@@ -39,4 +44,16 @@ textarea {
 textarea:focus,
 input:not([type="submit"]):focus {
   border-color: var(--accent) !important;
+}
+
+.delete {
+  background-color: tomato !important;
+}
+
+.delete:hover {
+  background-color: rgb(255, 159, 142) !important;
+}
+
+.delete:active {
+  background-color: rgb(119, 35, 20) !important;
 }

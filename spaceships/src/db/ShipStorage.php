@@ -122,7 +122,27 @@ class ShipStorage extends DatabaseModule
       $statement->bind_param("i", $shipId); // Bind the ship ID to ?
       $statement->execute(); // Execute the statement
 
-      return true; // Sucess
+      return true; // Success
+    } catch (Exception $e) {
+      return false; // Error occured, return false
+    } finally {
+      $this->disconnect($connection, $statement); // Close the connection and statement
+    }
+  }
+
+  // This function updates the specified ship with the given new name and new description
+  public function updateShip(int $shipId, string $name, string $description)
+  {
+    // Query: Update the ship with id ? with new name ? and new description ?
+    $query = "UPDATE ships SET name = ?, description = ? WHERE id = ?";
+
+    try {
+      $connection = $this->connect(); // Connect to the database
+      $statement = $connection->prepare($query); // Prepare the query
+      $statement->bind_param("ssi", $name, $description, $shipId); // Bind the parameters
+      $statement->execute(); // Execute the statement
+
+      return true; // Success
     } catch (Exception $e) {
       return false; // Error occured, return false
     } finally {

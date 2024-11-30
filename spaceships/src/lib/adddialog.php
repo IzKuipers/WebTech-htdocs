@@ -31,7 +31,7 @@ class AddDialog extends Component // is a derivative of the Component base class
             <label for="name">Name</label>
             <input type="text" name="name" id="name" required>
             <label for="description">Description</label>
-            <textarea type="text" name="description" id="description" required></textarea>
+            <textarea name="description" id="description" required></textarea>
             <label for="image">Image</label>
             <input type="file" name="image" id="image" accept="ïmage/png, .png, .jpg, .gif" required>
             <input type="submit" value="Upload">

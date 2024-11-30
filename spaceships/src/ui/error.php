@@ -90,7 +90,7 @@ function showError()
   HTML;
 }
 
-// This enumeration contains all error messages that are stored in the database. It should ALWAYS match the rows in the errors table.
+// This enumeration contains all error messages (in no particular order) that are stored in the database. It should ALWAYS match the rows in the errors table.
 enum ErrorMessages: int
 {
   case UserNotFound = 1;
@@ -100,4 +100,6 @@ enum ErrorMessages: int
   case UserAlreadyExists = 5;
   case ShipNotFound = 6;
   case ReqUserNotFound = 7;
+  case ShipDeleted = 8;
+  case ShipUpdated = 9;
 }
