@@ -8,7 +8,7 @@
  * https://github.com/IzKuipers/WebTech-htdocs/commits
  * 
  * Van toepassing in dit project:
- *  - Composer & PSR-4 (pending)
+ *  - Composer & PSR-4
  *  - MySQLi
  *  - OOP/inheritance
  *  - File uploads
