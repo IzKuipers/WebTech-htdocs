@@ -49,7 +49,7 @@ class ShipList extends Component // is a derivative of the Component base class
     $description = $ship["description"]; // The description of the ship
     $authorName = $ship["authorName"]; // The name of the author
     $authorId = $ship["authorId"]; // The ID of the author
-    $timestamp = date("j M Y · G:i", strtotime($ship["timestamp"])); // The date and time that the ship was posted
+    $timestamp = date("j M y · G:i", strtotime($ship["timestamp"])); // The date and time that the ship was posted
     $shortDescription = truncateString($description, 32); // Truncated version of the descripion with a max length of 32 characters
 
     $authorLink = $this->linkToUser ? "<a href='viewuser.php?id=$authorId'>$authorName</a>" : $authorName; // The author's name (a link if linkToUser is set)

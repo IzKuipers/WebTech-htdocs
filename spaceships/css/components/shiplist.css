@@ -2,16 +2,16 @@ div.ship-list {
   margin: 0 auto;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, 300px);
-  grid-template-rows: repeat(auto-fit, 350px);
+  grid-template-columns: repeat(auto-fit, 350px);
+  grid-template-rows: repeat(auto-fit, 380px);
   justify-content: center;
   gap: 40px;
   padding: 40px;
 }
 
 div.ship-list div.ship {
-  width: 300px;
-  height: 350px;
+  width: 350px;
+  height: 380px;
   border: var(--border-clr) 1px solid;
   padding: 20px;
   display: flex;
@@ -57,6 +57,13 @@ div.ship-list div.ship div.author div.pill {
   border-radius: 4px;
   min-width: 50px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.ship-list div.ship div.author div.pill.timestamp {
+  min-width: fit-content;
 }
 
 div.ship-list div.no-ships {
