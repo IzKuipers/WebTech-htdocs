@@ -20,8 +20,12 @@ class ShipList extends Component
   {
     $result = "<div class='ship-list'>";
 
-    foreach ($this->ships as $ship) {
-      $result .= $this->_ship($ship);
+    if (count($this->ships) === 0) {
+      $result .= $this->_noShips();
+    } else {
+      foreach ($this->ships as $ship) {
+        $result .= $this->_ship($ship);
+      }
     }
 
     $result .= "</div>";
@@ -64,5 +68,15 @@ class ShipList extends Component
     HTML;
 
     return $result;
+  }
+
+  private function _noShips()
+  {
+    return <<<HTML
+      <div class='no-ships'>
+        <span class="material-icons">rocket_launch</span>
+        <p>There's nothing here!</p>
+      </div>
+    HTML;
   }
 }

@@ -284,12 +284,12 @@ class AuthorizationManager
 
     try {
       $connection = $this->connect();
-      $query = "DELETE FROM tokens WHERE userId = $userId; DELETE FROM posts WHERE authorId = $userId;";
+      $query = "DELETE FROM tokens WHERE userId = $userId; DELETE FROM ships WHERE authorId = $userId;";
       $connection->multi_query($query);
 
       return true;
     } catch (Exception $e) {
-      return false;
+      throw new Exception($e->getMessage());
     } finally {
       $this->disconnect($connection);
     }

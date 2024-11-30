@@ -13,6 +13,7 @@ $sessionManager->checkIfLoggedIn();
 $user = $sessionManager->me();
 $ships = $shipStorage->getAllShips();
 $sessionManager->checkForRmAccRequest();
+$sessionManager->checkForAccResetRequest();
 
 ?>
 
