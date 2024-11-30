@@ -1,6 +1,8 @@
 <?php
 
-require_once "db/auth.php";
+namespace Spaceships\Db;
+
+require_once "db/AuthorizationManager.php";
 
 /**
  * SESSION MANAGER

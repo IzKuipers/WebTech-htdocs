@@ -1,10 +1,14 @@
 <?php
 
+namespace Spaceships\Db;
+
+use Spaceships\Db\DatabaseModule;
+use Exception;
+use Ramsey\Uuid\Uuid;
+
 require_once __DIR__ . "/../../env.php";
-include_once "dbmodule.php";
 require_once __DIR__ . "/../ui/error.php";
 
-use Ramsey\Uuid\Uuid;
 
 /**
  * AUTHORIZATION MANAGER
@@ -113,7 +117,7 @@ class AuthorizationManager extends DatabaseModule // It's a derivative of the Da
 
       // 0 returned rows? Show user not found dialog.
       if ($result->num_rows == 0) {
-        Dialog(ErrorMessages::UserNotFound);
+        Dialog(\ErrorMessages::UserNotFound);
 
         return "";
       }
@@ -126,7 +130,7 @@ class AuthorizationManager extends DatabaseModule // It's a derivative of the Da
 
       // Password invalid? Show password incorrect dialog.
       if (!$passwordValid) {
-        Dialog(ErrorMessages::PasswordIncorrect);
+        Dialog(\ErrorMessages::PasswordIncorrect);
 
         return "";
       }
@@ -170,7 +174,7 @@ class AuthorizationManager extends DatabaseModule // It's a derivative of the Da
       return true; // User created
     } catch (Exception $e) {
       // The only real error that can occur here is a conflict of the UNIQUE of `username`, so tell the user that the user already exists
-      Dialog(ErrorMessages::UserAlreadyExists);
+      Dialog(id: \ErrorMessages::UserAlreadyExists);
 
       return false; // User not created
     } finally {

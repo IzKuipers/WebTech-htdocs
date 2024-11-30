@@ -1,5 +1,11 @@
 <?php
 
+namespace Spaceships\Db;
+
+use mysqli;
+use mysqli_stmt;
+use Exception;
+
 include_once __DIR__ . "/../../env.php";
 
 /**

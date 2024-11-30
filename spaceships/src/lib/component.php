@@ -1,5 +1,7 @@
 <?php
 
+namespace Spaceships\Lib;
+
 /**
  * COMPONENT
  * 

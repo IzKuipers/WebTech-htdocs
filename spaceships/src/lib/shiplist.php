@@ -1,6 +1,9 @@
 <?php
 
-require_once "component.php";
+namespace Spaceships\Lib;
+
+use Spaceships\Lib\Component;
+
 require_once __DIR__ . "/../util.php";
 
 class ShipList extends Component // is a derivative of the Component base class

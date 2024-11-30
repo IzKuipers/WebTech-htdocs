@@ -1,6 +1,8 @@
 <?php
 
-require_once "component.php";
+namespace Spaceships\Lib;
+
+use Spaceships\Lib\Component;
 
 class AddDialog extends Component // is a derivative of the Component base class
 {

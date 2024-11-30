@@ -20,13 +20,16 @@
  * 
  * - Izaak
  */
-require_once "src/lib/header.php";
-require_once "src/lib/shiplist.php";
-require_once "src/lib/adddialog.php";
-require_once "src/lib/settings.php";
-require_once "src/db/ship.php";
-require_once "src/session.php";
+
+require_once "vendor/autoload.php";
+require_once "src/SessionManager.php";
+require_once "src/db/ShipStorage.php";
 require_once "src/ui/error.php";
+
+use Spaceships\Lib\HeaderBar;
+use Spaceships\Lib\ShipList;
+use Spaceships\Lib\SettingsDialog;
+use Spaceships\Lib\AddDialog;
 
 showError(); // Show potential error message
 

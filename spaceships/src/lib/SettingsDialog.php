@@ -1,7 +1,8 @@
 <?php
 
-require_once "component.php";
-require_once __DIR__ . "/../session.php";
+namespace Spaceships\Lib;
+
+require_once __DIR__ . "/../SessionManager.php";
 
 class SettingsDialog extends Component // is a derivative of the Component base class
 {

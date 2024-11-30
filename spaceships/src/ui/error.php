@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__ . "/../db/auth.php";
-require_once __DIR__ . "/../session.php";
+
+require_once __DIR__ . "/../db/AuthorizationManager.php";
+require_once __DIR__ . "/../SessionManager.php";
 require_once "toast.php";
+
 
 // This function displays an error dialog by its ID
 function Dialog(ErrorMessages $id, string $continue = "")

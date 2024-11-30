@@ -1,6 +1,7 @@
 <?php
+
+require_once "vendor/autoload.php";
 require_once "src/session.php";
-require_once "src/db/ship.php";
 
 $sessionManager->checkIfLoggedIn(); // Check if we're logged in
 $user = $sessionManager->me(); // Get the user

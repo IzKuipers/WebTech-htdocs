@@ -1,5 +1,9 @@
 <?php
 
+namespace Spaceships\Db;
+
+use Exception;
+
 /**
  * SHIP STORAGE
  * 

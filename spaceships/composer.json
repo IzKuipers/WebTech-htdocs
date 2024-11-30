@@ -2,7 +2,10 @@
   "name": "izaak/spaceships",
   "autoload": {
     "psr-4": {
-      "Izaak\\Spaceships\\": "src/"
+      "Spaceships\\": "src/",
+      "Spaceships\\Ui\\": "src/ui",
+      "Spaceships\\Db\\": "src/db",
+      "Spaceships\\Lib\\": "src/lib"
     }
   },
   "authors": [

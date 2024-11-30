@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . "/../session.php";
-require_once __DIR__ . "/../db/auth.php";
+require_once __DIR__ . "/../SessionManager.php";
+require_once __DIR__ . "/../db/AuthorizationManager.php";
 
 // This function displays a toast message if set
 function displayToastMessage()

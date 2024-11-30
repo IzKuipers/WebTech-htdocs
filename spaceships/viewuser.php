@@ -1,10 +1,12 @@
 <?php
 
-require_once "src/session.php";
+use Spaceships\Lib\ShipList;
+use Spaceships\Lib\HeaderBar;
+
+require_once "vendor/autoload.php";
+require_once "src/SessionManager.php";
 require_once "src/ui/error.php";
-require_once "src/lib/header.php";
-require_once "src/db/ship.php";
-require_once "src/lib/shiplist.php";
+require_once "src/db/ShipStorage.php";
 
 $sessionManager->checkIfLoggedIn(); // Check if we're logged in
 $user = $sessionManager->me(); // Get the user
