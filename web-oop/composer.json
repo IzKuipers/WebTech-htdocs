@@ -1,0 +1,17 @@
+{
+    "name": "izaak/web-oop",
+    "autoload": {
+        "psr-4": {
+            "Izaak\\WebOop\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Izaak Kuipers",
+            "email": "izaak.kuipers@gmail.com"
+        }
+    ],
+    "require": {
+        "dompdf/dompdf": "^3.0"
+    }
+}
