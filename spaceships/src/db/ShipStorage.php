@@ -33,7 +33,8 @@ class ShipStorage extends DatabaseModule
         ships.timestamp
       FROM ships
       INNER JOIN users 
-      ON ships.authorId = users.id;
+      ON ships.authorId = users.id
+      ORDER BY ships.timestamp DESC;
     SQL;
 
     try {
@@ -69,6 +70,7 @@ class ShipStorage extends DatabaseModule
       INNER JOIN users
       ON ships.authorId = users.id
       WHERE authorId = $userId
+      ORDER BY ships.timestamp DESC;
     SQL;
 
     try {
